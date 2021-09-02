@@ -1,1 +1,143 @@
+---
+title: "Data 609 - Module1"
+author: "Amit Kapoor"
+date: "8/28/2021"
+output:
+  html_document:
+    fig_width: 15
+    highlight: pygments
+    number_sections: no
+    theme: flatly
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Ex. 1
+Find the minimum of $f(x,y) = x^2 + xy + y^2 in (x, y) \in \mathbb{R}^2$
+
+$f_x(x,y) = \frac{\partial}{\partial x} (x^2 + xy + y^2)$
+
+$f_y(x,y) = \frac{\partial}{\partial y} (x^2 + xy + y^2)$
+
+Now the stationary conditions are 
+
+$\frac{\partial f}{\partial x} = 0$ and $\frac{\partial f}{\partial y} = 0$
+
+That means
+
+2x + y = 0
+x + 2y = 0
+
+From second equation above we get x = -2y
+
+replacing x in first equation gives
+
+2 * (-2y) + y = 0 => y = 0
+
+putting y = 0 in any of the above equations, we get x = 0 
+
+Nest is to compute all 4 second partial derivatives.
+
+$f_{xx}(x,y) = \frac{\partial}{\partial x} (2x + y)$ = 2
+
+$f_{xy}(x,y) = \frac{\partial}{\partial y} (2x + y)$ = 1 
+
+$f_{yx}(x,y) = \frac{\partial}{\partial y} (x + 2y)$ = 1
+
+$f_{yy}(x,y) = \frac{\partial}{\partial y} (x + 2y)$ = 2
+
+Hessian Matrix 
+
+$H = \begin{pmatrix} f_{xx}  & f_{xy} \\f_{yx} & f_{yy} \end{pmatrix}$ = $\begin{pmatrix} 2  & 1 \\1& 2 \end{pmatrix}$ 
+
+Thus H is positive and point (0,0) is minimum.
+
+
+# Ex. 2
+For $f(x)= x^{4}$ in $\mathbb{R}$, it has a global minimum at x = 0. Find its new minimum if a constraint $x^{2}  \geq 1$ is added.
+
+Using Penalty method
+
+$f(x)= x^{4}$ and $g(x)=x^{2}-1$
+
+Now using a penalty parameter $\mu$ we have
+
+$\amalg = f(x) +  \mu [g(x)]^2$ = $x^{4} + \mu (x^{2}-1)^2$ = $x^{4} + \mu (x^{4}+1-2x^{2})$
+
+From $\amalg'(x) = 0$, we have
+
+$4 x^{3} + 4 \mu x^{3} -4 \mu x= 0$ 
+
+on simplifying we get
+
+$x^{2} = \frac {\mu}{(1 + \mu )}$ 
+
+for very large value of $\mu$, we will have 
+
+$x^{2} = \frac {\mu}{(1 + \mu )} \approx \frac {\mu}{\mu } \approx 1$ 
+
+so x can be 1 or -1 so the new minimum will be at x = 1
+
+# Ex. 3
+Use a Lagrange multiplier to solve the optimization problem $min f(x,y) =  x^{2} + 2xy +  y^{2}$, subject to $y = x^{2} - 2$
+
+$f(x,y) =  x^{2} + 2xy +  y^{2}$
+
+$h(x, y) = x^{2} - y -2$
+
+$\phi = f(x, y) +  \lambda h(x,y)$ 
+
+$\phi = (x^{2} + 2xy +  y^{2}) +  \lambda (x^{2} - y -2)$
+
+$\frac{\partial \phi}{\partial x} = 2x + 2y +  2\lambda x = 0$
+
+$\frac{\partial \phi}{\partial y} = 2x + 2y - \lambda = 0$
+
+$\frac{\partial \phi}{\partial  \lambda } =  x^{2} - y -2= 0$
+
+From the second equation, $2x + 2y - \lambda = 0$ => $\lambda = 2(x + y)$
+
+Having $\lambda = 2(x + y)$ in the first equation gives us
+
+$2x + 2y +  2(2(x + y)) x = 0$
+
+$2x + 2y +  4x^2 + 4xy = 0$
+
+$2(x + y + 2x^2 + 2xy) = 0$ which gives us $y = \frac{-2x^2 - x}{2x + 1}$
+
+Substitute $y = \frac{-2x^2 - x}{2x + 1}$ into the third equation gives us
+
+$x^{2} - 2 - \frac{-2x^2 - x}{2x + 1}  = 0$ when simplified gives x = 1 or x = - 2.
+
+Plugging x = 1 into the third equation gives us y = -1 and plugging in x = -2 gives us y = 2. We get two points (1, -1) and (-2, 2).
+
+The optimality for $min f(x,y) =  x^{2} + 2xy +  y^{2}$ is (1, -1) with $f_{min} = 0$ and (-2, 2) with $f_{min} = 0$
+
+
+*Resources:*
+
+https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives/lagrange-multipliers-and-constrained-optimization/v/constrained-optimization-introduction
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
