@@ -238,17 +238,19 @@ div.tocify {
 <div id="ex.-1" class="section level1">
 <h1>Ex. 1</h1>
 <p>Find the minimum of <span class="math inline">\(f(x,y) = x^2 + xy + y^2 in (x, y) \in \mathbb{R}^2\)</span></p>
+<p><strong>Solution:</strong></p>
 <p><span class="math inline">\(f_x(x,y) = \frac{\partial}{\partial x} (x^2 + xy + y^2)\)</span></p>
 <p><span class="math inline">\(f_y(x,y) = \frac{\partial}{\partial y} (x^2 + xy + y^2)\)</span></p>
 <p>Now the stationary conditions are</p>
 <p><span class="math inline">\(\frac{\partial f}{\partial x} = 0\)</span> and <span class="math inline">\(\frac{\partial f}{\partial y} = 0\)</span></p>
 <p>That means</p>
-<p>2x + y = 0 x + 2y = 0</p>
+<p><span class="math inline">\(2x + y = 0\)</span></p>
+<p><span class="math inline">\(x + 2y = 0\)</span></p>
 <p>From second equation above we get x = -2y</p>
 <p>replacing x in first equation gives</p>
-<p>2 * (-2y) + y = 0 =&gt; y = 0</p>
+<p><span class="math inline">\(2 * (-2y) + y = 0 =&gt; y = 0\)</span></p>
 <p>putting y = 0 in any of the above equations, we get x = 0</p>
-<p>Nest is to compute all 4 second partial derivatives.</p>
+<p>Next is to compute all 4 second partial derivatives.</p>
 <p><span class="math inline">\(f_{xx}(x,y) = \frac{\partial}{\partial x} (2x + y)\)</span> = 2</p>
 <p><span class="math inline">\(f_{xy}(x,y) = \frac{\partial}{\partial y} (2x + y)\)</span> = 1</p>
 <p><span class="math inline">\(f_{yx}(x,y) = \frac{\partial}{\partial y} (x + 2y)\)</span> = 1</p>
@@ -260,6 +262,7 @@ div.tocify {
 <div id="ex.-2" class="section level1">
 <h1>Ex. 2</h1>
 <p>For <span class="math inline">\(f(x)= x^{4}\)</span> in <span class="math inline">\(\mathbb{R}\)</span>, it has a global minimum at x = 0. Find its new minimum if a constraint <span class="math inline">\(x^{2} \geq 1\)</span> is added.</p>
+<p><strong>Solution:</strong></p>
 <p>Using Penalty method</p>
 <p><span class="math inline">\(f(x)= x^{4}\)</span> and <span class="math inline">\(g(x)=x^{2}-1\)</span></p>
 <p>Now using a penalty parameter <span class="math inline">\(\mu\)</span> we have</p>
@@ -275,6 +278,7 @@ div.tocify {
 <div id="ex.-3" class="section level1">
 <h1>Ex. 3</h1>
 <p>Use a Lagrange multiplier to solve the optimization problem <span class="math inline">\(min f(x,y) = x^{2} + 2xy + y^{2}\)</span>, subject to <span class="math inline">\(y = x^{2} - 2\)</span></p>
+<p><strong>Solution:</strong></p>
 <p><span class="math inline">\(f(x,y) = x^{2} + 2xy + y^{2}\)</span></p>
 <p><span class="math inline">\(h(x, y) = x^{2} - y -2\)</span></p>
 <p><span class="math inline">\(\phi = f(x, y) + \lambda h(x,y)\)</span></p>
@@ -287,11 +291,12 @@ div.tocify {
 <p><span class="math inline">\(2x + 2y + 2(2(x + y)) x = 0\)</span></p>
 <p><span class="math inline">\(2x + 2y + 4x^2 + 4xy = 0\)</span></p>
 <p><span class="math inline">\(2(x + y + 2x^2 + 2xy) = 0\)</span> which gives us <span class="math inline">\(y = \frac{-2x^2 - x}{2x + 1}\)</span></p>
-<p>Substitute <span class="math inline">\(y = \frac{-2x^2 - x}{2x + 1}\)</span> into the third equation gives us</p>
-<p><span class="math inline">\(x^{2} - 2 - \frac{-2x^2 - x}{2x + 1} = 0\)</span> when simplified gives x = 1 or x = - 2.</p>
-<p>Plugging x = 1 into the third equation gives us y = -1 and plugging in x = -2 gives us y = 2. We get two points (1, -1) and (-2, 2).</p>
+<p>Having <span class="math inline">\(y = \frac{-2x^2 - x}{2x + 1}\)</span> into the third equation gives us</p>
+<p><span class="math inline">\(x^{2} - 2 - (\frac{-2x^2 - x}{2x + 1}) = 0\)</span> which after simplifying gives us x = 1 or x = - 2.</p>
+<p>Now with x = 1, the third equation gives us y = -1 and with in x = -2 gives us y = 2.</p>
+<p>Finally we have two points (1, -1) and (-2, 2).</p>
 <p>The optimality for <span class="math inline">\(min f(x,y) = x^{2} + 2xy + y^{2}\)</span> is (1, -1) with <span class="math inline">\(f_{min} = 0\)</span> and (-2, 2) with <span class="math inline">\(f_{min} = 0\)</span></p>
-<p><em>Resources:</em></p>
+<p><strong>Resources:</strong></p>
 <p><a href="https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives/lagrange-multipliers-and-constrained-optimization/v/constrained-optimization-introduction" class="uri">https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives/lagrange-multipliers-and-constrained-optimization/v/constrained-optimization-introduction</a></p>
 </div>
 
