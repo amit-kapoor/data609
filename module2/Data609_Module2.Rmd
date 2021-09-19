@@ -3,6 +3,9 @@ title: "Data 609 - Module2"
 author: "Amit Kapoor"
 date: "9/10/2021"
 output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
   html_document:
     fig_width: 15
     highlight: pygments
@@ -10,9 +13,6 @@ output:
     theme: flatly
     toc: yes
     toc_float: yes
-  pdf_document:
-    latex_engine: xelatex
-    toc: yes
 ---
 
 
@@ -93,6 +93,9 @@ It is estimated that there is a typo in every 250 data entries in a database, as
 
 **Solution:**
 
+**what is the probability of exactly 4 typos?**
+
+
 ```{r}
 lambda <- 1000 * (1/250)
 x <- 4 # 4 typos
@@ -101,6 +104,9 @@ p_four_typo
 ```
 
 The probability of exactly 4 typos is 19.54%.
+
+
+**What is the probability of no typo at all?**
 
 ```{r}
 lambda <- 4
@@ -125,6 +131,10 @@ p1
 q2 <- dpois(0, lambda = 4)
 q2
 ```
+
+
+**Use R to draw 1000 samples with $\lambda = 4$ and show their histogram.**
+
 
 ```{r}
 events = 1:1000
