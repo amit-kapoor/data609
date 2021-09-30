@@ -1,1 +1,167 @@
+---
+title: "Data 609 - Module2"
+author: "Amit Kapoor"
+date: "9/10/2021"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+  html_document:
+    fig_width: 15
+    highlight: pygments
+    number_sections: no
+    theme: flatly
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Ex. 1
+Write down Newton's formula for finding the minimum of $f(x) =  (3x^{4} -  4x^{3}) / 12$ in the range [-10, 10]. Then, implement it in R.
+
+**Solution:**
+
+$f(x) =  (3x^{4} -  4x^{3}) / 12$
+
+$f'(x) = \frac{12x^{3} - 12x^2}{12} =  x^3 - x^2$
+
+$f''(x) = 3x^2 - 2x$
+
+Using Newton's formula
+
+$x_{k  + 1} =  x_{k} -  \frac{x_k^{3} - x_k^{2}}{3x_k^{2} - 2x_k}$
+
+```{r}
+
+f <- function(x) {
+  x - (x^3 - x^2)/(3 * x^2 - 2*x)
+}
+
+fetch_values <- function(X_0) {
+  val <- c()
+  for(i in 1:10) {
+    if(i==1) {
+      val[[i]] <- f(X_0)
+    } else {
+      val[[i]] <- f(val[[i-1]])
+    }
+  }
+  print(val)
+}
+
+```
+
+
+```{r}
+fetch_values(3)
+```
+
+
+```{r}
+fetch_values(1.5)
+```
+
+
+It looks like the minimum is at 1 since given multiple starting values, it converges to 1.
+
+
+
+
+# Ex. 2
+Explore optimize() in R and try to solve the previous problem.
+
+**Solution:**
+
+```{r}
+f <- function(x) {
+  (3*x^4 -  4*x^3)/12
+}
+
+x_min <- optimize(f, c(-10, 10))
+x_min
+```
+
+Here we can confirm that minimum is at 1 and value of given function is -0.0833.
+
+
+# Ex. 3 
+Use any optimization algorithm to find the minimum of $f(x,y) =  (x-1)^{2} + 100 (y -  x^{2}) ^{2}$ in the domain $-10  \leq x,y  \leq 10.$ Discuss any issues concerning the optimization process.
+
+**Solution:**
+
+Ww will use Newton's method for optimization of multivariate function. 
+
+The equation is
+
+$x_{t + 1} =  x_{t} -  H^{-1}\bigtriangledown f(x,y)$
+
+where $\bigtriangledown f$ is the gradient vector and $H$ is Hessian matrix
+
+Starting value.
+
+$x_{0} = \begin{bmatrix}x  \\y \end{bmatrix} =\begin{bmatrix}0  \\0 \end{bmatrix}$ 
+
+$\bigtriangledown f(x,y) =  \begin{bmatrix}(x-1)^{2}  \\100 (y -  x^{2}) ^{2} \end{bmatrix}$
+
+We will start by finding Hessian matrix.
+
+$f_{xx} = 1200 x^{2} + 2 - 400y$
+
+$f_{xy} = -400x$
+
+$f_{yy} = 200$
+
+$f_{yx} = -400x$
+
+$H = \bigtriangledown^2 f(x,y) =  \begin{bmatrix}2 & -0  \\-0 & 200 \end{bmatrix}$ 
+
+$H^{-1}  = \begin{bmatrix}0.5 & 0  \\0 & 0.005 \end{bmatrix}$ 
+
+With t = 0 $x_{1} =  x_{0} -  H^{-1}\bigtriangledown f(x,y)$
+
+$x_{1} =  \begin{bmatrix}0  \\0 \end{bmatrix} - \begin{bmatrix}0.5 & 0  \\0 & 0.005 \end{bmatrix}\begin{bmatrix}1  \\0 \end{bmatrix}$
+
+$x_{1} =  \begin{bmatrix}0  \\0 \end{bmatrix} - \begin{bmatrix}0.5  \\0 \end{bmatrix}$
+
+$x_{1} =  \begin{bmatrix}-0.5  \\0 \end{bmatrix}$
+
+Given this, we can say f(x,y) will converge into a single point as we go through further values of t.
+
+
+# Ex. 4
+Explore the optimr package for R and try to solve the previous problem.
+
+**Solution:**
+
+```{r lib, include=FALSE}
+# Libraries
+library(optimr)
+```
+
+```{r}
+
+f_xy <- function(param) {
+  (param[1] - 1)^2 + 100 * (param[2] - param[1]^2)^2
+}
+
+options(scipen = 999)
+optimr(c(-10,10), f_xy, method = "L-BFGS-B")
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
