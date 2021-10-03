@@ -94,7 +94,7 @@ Use any optimization algorithm to find the minimum of $f(x,y) =  (x-1)^{2} + 100
 
 **Solution:**
 
-Ww will use Newton's method for optimization of multivariate function. 
+We will use Newton's method for optimization of multivariate function. 
 
 The equation is
 
