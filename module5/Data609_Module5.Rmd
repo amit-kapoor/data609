@@ -1,1 +1,148 @@
+---
+title: "Data 609 - Module5"
+author: "Amit Kapoor"
+date: "10/22/2021"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+  html_document:
+    fig_width: 15
+    highlight: pygments
+    number_sections: no
+    theme: flatly
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r libraries, include=FALSE, warning=FALSE, message=FALSE}
+# Libraries
+
+```
+
+
+# Ex. 1
+Carry out the logistic regression (Example 22 on Page 94) in R using the data
+
+| x       | 0.1     | 0.5     | 1.0     | 1.5    | 2.0    | 2.5    |
+|--------:|:-------:|:-------:|:-------:|:------:|:------:|:------:|
+| y       | 0       | 0       | 1       | 1      | 1      | 0      |
+
+The formula is $y(x) =  \frac{1}{1 + exp[-(a + bx)]}$
+
+**Solution**
+
+We will use here `glm` function with family as binomial to perform logistic regression for given values of x and y. 
+
+```{r logit}
+x <- c(0.1, 0.5, 1.0, 1.5, 2.0, 2.5)
+y <- c(0, 0, 1, 1, 1, 0)
+
+# Logistics Regression
+lr <- glm(y~x, family = binomial)
+summary(lr)
+```
+
+The null deviance shows how well our model can predict by only using intercept. Residual deviance shows how well our model can predict using intercepts and inputs. AIC is Akaike information criterian. It is used to compare models. All these values if smaller than better.
+
+
+# Ex. 2
+Using the motor car database (mtcars) of the built-in data sets in R to carry out the basic principal component analysis and explain your results
+
+**Solution**
+
+We will use prcomp() to perform principal component analysis on mtcars dataset. The scale argument True implies variables will be scaled to have unit variance.
+
+```{r pca}
+pca <- prcomp(mtcars, scale=TRUE)
+summary(pca)
+```
+
+We can see here the first PCA components shows 60% variation in the data which gets reduced in further components. Drwaing screeplot below confirms the variance decrease.
+
+
+```{r plot-pca}
+screeplot(pca)
+```
+
+pca biplot shows the scores of each case and the loading of each variable on the first two principal components. The left and bottom axes shows principal axes scores and top and right axes shows the loadings.
+
+Seeing the biplot below  hp, cycl, disp and wt are similar and gear, am, mpg, drat, qsec, and vs are similar based on their pca1 components.
+
+
+```{r biplot-pca, fig.height=20, fig.width=20}
+biplot(pca)
+```
+
+
+
+
+
+# Ex. 3
+Generate a random 4 X 5 matrix, and find its singular value decomposition using R.
+
+**Solution**
+
+```{r rand-mat}
+matrix <- matrix(rnorm(20), nrow = 4)
+matrix
+```
+
+
+```{r svd}
+svd(matrix)
+```
+
+
+
+
+# Ex. 4
+First try to simulate 100 data points for y using $y = 5 x_{1} + 2 x_{2} + 2 x_{3} +  x_{4}.$ where $x_{1}, x_{2}$ are uniformly distributed in [1,2], while $x_{3} , x_{4}$ are normally distributed with zero mean and unit variance. Then, use the principal component analysis (PCA) to analyze the data to find its principal components. Are the results expected from the formula?
+
+**Solution**
+
+In the first step, we will simulate x1, x2, x3 and x4 and create a dataframe following the given formula.
+
+```{r simulate}
+set.seed(609)
+x1 <- runif(100, min=1, max=2)
+x2 <- runif(100, min=1, max=2)
+x3 <- rnorm(100, mean=0, sd=1)
+x4 <- rnorm(100, mean=0, sd=1)
+
+y = 5*x1 + 2*x2 + 2*x3 + x4
+
+df <- as.data.frame(cbind(y,x1,x2,x3,x4))
+summary(df)
+```
+
+We will now use prcomp() to perform principal component analysis. The scale argument True implies variables will be scaled to have unit variance.
+
+```{r prcomp}
+pca_df <- prcomp(df, scale=TRUE)
+summary(pca_df)
+```
+
+The scree plot below shows that principal components variance values do not differ much and they cover similar variation in the data points.
+
+```{r plot-pcadf}
+screeplot(pca_df)
+```
+
+
+```{r biplot-pcadf, fig.height=20, fig.width=20}
+biplot(pca_df)
+```
+
+```{r}
+str(pca_df)
+```
+
+The results above do show what we would expect from formula.
 
