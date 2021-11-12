@@ -1,1 +1,227 @@
+---
+title: "Data 609 - Module6"
+author: "Amit Kapoor"
+date: "10/22/2021"
+output:
+  html_document:
+    fig_width: 15
+    highlight: pygments
+    number_sections: no
+    theme: flatly
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries}
+# Libraries
+library(class)
+library(cluster)
+```
+
+# Ex. 1
+Use a data set such as the `PlantGrowth` in R to calculate three different distance metrics and discuss the results.
+
+**Solution**
+
+We will use here `PlantGrowth` dataset in R and dist() function that gives the distance matrix using specified distance to compute the distances between the rows of distance matrix. Here the methods considered are `manhattan`, `euclidean` and `canberra`.
+
+```{r man}
+plants_man <- dist(PlantGrowth, method = "manhattan")
+as.matrix(plants_man)
+```
+
+
+```{r euc}
+plants_euc <- dist(PlantGrowth, method = "euclidean")
+as.matrix(plants_euc)
+```
+
+
+
+```{r can}
+plants_can <- dist(PlantGrowth, method = "canberra")
+as.matrix(plants_can)
+```
+
+
+
+
+# Ex. 2
+Now use a higher-dimensional data set `mtcars`, try the same three distance metrics in the previous question and discuss the results.
+
+**Solution**
+
+Now we will have `mtcars` dataset.
+
+```{r mtcars}
+head(mtcars)
+```
+
+We will take transpose of mtcars dataset and apply the same 3 distance methods.
+
+```{r t-mtcars}
+head(t(mtcars))
+```
+
+
+
+
+```{r mtcars-man}
+mtcars_man <- dist(t(mtcars), method = "manhattan")
+as.matrix(mtcars_man)
+```
+
+
+
+```{r mtcars-euc}
+mtcars_euc <- dist(t(mtcars), method = "euclidian")
+as.matrix(mtcars_euc)
+```
+
+
+
+```{r mtcars-can}
+mtcars_can <- dist(t(mtcars), method = "canberra")
+as.matrix(mtcars_can)
+```
+
+
+
+
+# Ex. 3
+Use the built-in data set `mtcars` to carry out hierarchy clustering using two different distance metrics and compare if they get the same results. Discuss the results.
+
+**Solution**
+
+
+
+```{r summ-mtcars}
+summary(mtcars)
+```
+
+
+```{r euc-clus}
+euc_clus <- hclust(dist(mtcars, method = "euclidian"))
+plot(euc_clus)
+```
+
+
+```{r euc-ct}
+ct1 <- cutree(euc_clus, k = 3)
+table(ct1)
+```
+
+
+```{r man-clus}
+man_clus <- hclust(dist(mtcars, method = "manhattan"))
+plot(man_clus)
+```
+
+
+```{r man-ct}
+ct2 <- cutree(man_clus, k = 3)
+table(ct2)
+```
+
+
+We see above both the methods give higher elements to first cluster but second and third clusters are more evenly distributed in euclidian. 
+
+
+
+# Ex. 4
+Load the well-known Fisher’s `iris` flower data set that consists of 150 samples for 3 species (50 samples each species). The four measures or features are the lengths and widths of sepals and petals. Use the kNN clustering to analyze this iris data set by selecting 120 samples for training and 30 samples for testing.
+
+
+**Solution**
+
+
+
+```{r iris}
+# iris dataset
+head(iris)
+```
+
+
+```{r iris-knn}
+set.seed(609)
+
+# to split
+split <- sample(nrow(iris), nrow(iris)*0.80)
+
+# feature variables
+train <- iris[split, -5] #120 rows
+test <- iris[-split, -5] #30 rows
+
+# target variable
+train_trgt <- iris[split, 5] #120 rows
+test_trgt <- iris[-split, 5] #30 rows
+
+# knn
+knn <- knn(train, test, cl=train_trgt, k=5)
+
+# contingency table
+knn_tbl <- table(knn, test_trgt)
+
+# knn accuracy
+acc_knn <- sum(diag(knn_tbl)) / sum(knn_tbl)
+acc_knn
+```
+
+
+
+
+# Ex. 5
+Use the `iris` data set to carry out k-means clustering. Compare the results to the actual classes and estimate the clustering accuracy.
+
+
+**Solution**
+
+
+
+```{r}
+set.seed(609)
+
+iris_kmeans <- kmeans(iris[,-5], centers = 3)
+iris_kmeans
+```
+
+
+```{r}
+# contingency table
+iris_clus <- iris_kmeans$cluster
+table(iris_clus)
+```
+
+
+
+```{r clusplot}
+clusplot(iris[,-5], iris_clus)
+```
+
+
+```{r}
+# kmeans accuracy
+tbl_kmeans <- table(iris$Species, iris_clus)
+acc_kmeans <- sum(diag(tbl_kmeans)) / sum(tbl_kmeans)
+acc_kmeans
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
