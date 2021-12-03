@@ -1,1 +1,101 @@
+---
+title: "Data 609 - Module7"
+author: "Amit Kapoor"
+date: "11/23/2021"
+output:
+  html_document:
+    fig_width: 15
+    highlight: pygments
+    number_sections: no
+    theme: flatly
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r libraries}
+# Libraries
+library(e1071)
+library(caret)
+```
+
+
+# Ex.1
+Use the svm() algorithm of the `e1071` package to carry out the support vector machine for the `PlantGrowth` data set. Then, discuss the number of support vectors/samples. [Install the e1071 package in R if needed.]
+
+**Solution**
+
+```{r pg-data}
+# PlantGrowth datset
+data(PlantGrowth)
+head(PlantGrowth)
+```
+```{r plant-svm}
+svm_pg <- svm(group ~ ., data = PlantGrowth)
+summary(svm_pg)
+```
+
+It comes out that there are 29 support vectors out of 30 samples that are closer to the hyperplane and influence the orientation and position of the hyperplane. There are 3 classes.
+
+
+
+
+# Ex.2
+Do a similar SVM analysis as that in the previous question using the `iris` data set. Discuss the number of support vectors/samples.
+
+**Solution**
+
+```{r iris-data}
+# iris datset
+data("iris")
+head(iris)
+```
+
+```{r iris-svm}
+svm_iris <- svm(Species ~ ., data = iris)
+summary(svm_iris)
+```
+
+There are 51 support vectors and 3 classes in this case out of 150 samples in the dataset. In this case there is very less data for support vectors as compared to `PlantGrowth` dataset.
+
+# Ex.3
+Use the iris data set (or any other data set) to select 80% of the samples for the training svm(), then use the rest 20% for validation. Discuss your results.
+
+**Solution**
+
+```{r iris-train}
+set.seed(609)
+
+# partitioning for training and validation
+partition <- createDataPartition(iris$Species, p=0.80, list = FALSE)
+training <- iris[partition,]
+validation <- iris[-partition,]
+
+
+svm_train_iris <- svm(Species ~ ., data = training)
+summary(svm_train_iris)
+
+```
+
+
+```{r iris-pred}
+pred_valid <- predict(svm_train_iris, validation)
+confusionMatrix(validation$Species, pred_valid)
+```
+
+
+The accuracy of the model has comeout as 96.67%.Here the training model shows 45 support vectors.
+
+
+
+
+
+
 
