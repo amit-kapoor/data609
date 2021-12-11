@@ -1,1 +1,194 @@
+---
+title: "Data 609 - Module8"
+author: "Amit Kapoor"
+date: "11/28/2021"
+output:
+  html_document:
+    fig_width: 15
+    highlight: pygments
+    number_sections: no
+    theme: flatly
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-lib}
+library(nnet)
+library(caret)
+```
+
+
+# Ex.1
+Use the nnet package to analyze the iris data set. Use 80% of the 150 samples as the training data and the rest for validation. Discuss the results.
+
+**Solution**
+
+```{r iris-nnet}
+# iris dataset
+data(iris)
+
+set.seed(111)
+
+partition <- sample(nrow(iris), nrow(iris)*0.80)
+train <- iris[partition,]
+test <- iris[-partition,]
+
+# apply model
+iris_nnet <- nnet(Species ~ ., size=2, data = train)
+```
+
+```{r summ-model}
+# model summary
+summary(iris_nnet)
+```
+
+
+```{r conf-mat}
+# confusionMatrix
+confusionMatrix(as.factor(predict(iris_nnet, test, type = 'class')), test$Species)
+```
+
+
+We can see here using nnet package we see 90% accuracy in prediction. There are 19 weights used with final value as 0.000087. 
+
+
+# Ex.2
+As a mini project, install the keras package and learn how to use it. Then, carry out various tasks that may be useful to your project and studies.
+
+**Solution**
+
+We will first install the keras package using tensorflow.
+
+```{r install-keras}
+#install.packages("devtools")
+#devtools::install_github("rstudio/keras")
+#install_tensorflow()
+```
+
+
+```{r lib-ker}
+library(keras)
+library(tensorflow)
+```
+
+
+We will use here MNIST dataset from keras recognizing handwritten digits. MNIST dataset includes 28 x 28 grayscale images of handwritten digits. This dataset includes images labels as well to recognize the digit.
+
+```{r mnist}
+mnist <- dataset_mnist()
+
+# train and test data
+img_training <- mnist$train$x
+label_training <- mnist$train$y
+img_testing <- mnist$test$x
+label_testing <- mnist$test$y
+```
+
+Seeing the dimension of training and testing images, there are 60K images for training and 10k images for testing.
+
+```{r dim-train}
+dim(img_training)
+```
+
+
+```{r dim-test}
+dim(img_testing)
+```
+
+Here is an example of 17th image from training set. 
+
+```{r disp-img}
+# 17th image
+digit <- img_training[17, 1:28, 1:28]
+# set the parameter- "s" for square plotting region
+par(pty="s")
+image(t(digit), col=gray.colors(256))
+```
+
+As we seen above, the x data is a three dim array (images, width, height) that would be reshaped in single dimension (28x28 into a single object of length 784). Next we will convert grayscale values from integers (between 0 and 255) into floating values between 0 and 1. Next is y data that is integer values between 0 and 9 and it will be one hot encoded for training.
+
+```{r data-prep}
+# reshaping
+img_training <- array_reshape(img_training, c(nrow(img_training), 784))
+img_testing <- array_reshape(img_testing, c(nrow(img_testing), 784))
+# reacaling
+img_training <- img_training / 255
+img_testing <- img_testing / 255
+
+# one-hot encoded
+label_training <- to_categorical(label_training, 10)
+label_testing <- to_categorical(label_testing, 10)
+```
+
+Next we will create the sequential model and add layers into it. We have 3 layers here by providing input shape on the first one. we have used activation functions in first 2 layers as relu followed by softmax in final one.
+
+
+```{r warning=FALSE}
+model <- keras_model_sequential()
+model %>% 
+  layer_dense(units = 256, activation = "relu", input_shape = c(784)) %>% 
+  layer_dense(units = 128, activation = "relu") %>% 
+  layer_dense(units = 10, activation = "softmax")
+
+summary(model)
+```
+
+Next we will compile the model.
+
+```{r com-model}
+# compile
+model %>% compile(loss="categorical_crossentropy", optimizer=optimizer_rmsprop(), metrics=c("accuracy"))
+```
+
+Next we will use fit() function to train the model with 25 epochs and batches of 128 images.
+
+```{r fit-model}
+set.seed(609)
+
+hist <- model %>% fit(
+  img_training, 
+  label_training, 
+  epochs=25,
+  batch_size=128,
+  validation_split=0.2
+)
+```
+
+
+```{r plot-hist}
+plot(hist)
+```
+
+Here is loss and accuracy of model trained above.
+
+```{r eval-model}
+# eval loss and accuracy
+model %>% evaluate(img_testing, label_testing)
+```
+
+Now we will do final predictions from trained model.
+
+```{r pred-model}
+# predicted classes
+predictions <- model %>% predict(img_testing)
+head(predictions)
+```
+
+During this study we have learned how to create keras sequential model, split the mnist dataset in train and test, reshape the data, fit the data into model and then do predictions. I see keras as a very good tool to used in future projects.
+
+
+# References
+https://www.datacamp.com/community/tutorials/keras-r-deep-learning
+https://www.analyticsvidhya.com/blog/2017/06/getting-started-with-deep-learning-using-keras-in-r/
+
+
 
